@@ -1,3 +1,6 @@
+//*************************************
+//Main file of Boom-Boom robotics syste
+//*************************************
 #include "main.h"
 #include "intake.h"
 #include "slapper.h"
