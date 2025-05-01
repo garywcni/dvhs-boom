@@ -1,6 +1,6 @@
-//*************************************
-//Main file of Boom-Boom robotics syste
-//*************************************
+//**************************************
+//Main file of Boom-Boom robotics system
+//**************************************
 #include "main.h"
 #include "intake.h"
 #include "slapper.h"
@@ -117,7 +117,7 @@ lemlib::OdomSensors sensors(nullptr,
 							nullptr,
 							nullptr,
 							nullptr,
-							&imu
+							0
 );
 #endif 
 
@@ -250,6 +250,7 @@ void autonomous() {
  * Runs in driver control
  */
 void opcontrol() {
+    initialize();
     // controller
     // loop to continuously update motors
     while (true) 
