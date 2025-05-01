@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 //**************************************
 //Main file of Boom-Boom robotics system
 //**************************************
-=======
-#include <string>   // Often useful with std::cout
->>>>>>> 2668535a99934ecf0fa6d4b3083092bc66685106
 #include "main.h"
 #include "intake.h"
 #include "slapper.h"
@@ -18,31 +14,10 @@
 #define VERSION_MINOR 1
 
 // --- Debug Message ---
-// Try changing this value to 0, 1, 2, or undefining it (0: disabled, 1: only LCD, 2: only Terminal, 3: Both)
-#define DEBUG_LEVEL 3
+// Try changing this value to 0, 1, 2, or undefining it (0: disabled, 1: only Terminal)
+#define DEBUG_LEVEL 1
 
-#define LOG_1(lcd_line, message) do { \
-    char buffer[128]; /* Buffer to hold the formatted string, adjust size if needed */ \
-    /* Format: L<line> <filename>: <your_message> */ \
-    snprintf(buffer, sizeof(buffer), "L%d %s: %s", __LINE__, __FILE__, (message)); \
-    /* Ensure null termination even if snprintf truncates */ \
-    buffer[sizeof(buffer) - 1] = '\0'; \
-    pros::lcd::set_text((lcd_line), buffer); \
-} while (0)
-
-#define LOG_2(message) do { \
-    /* Format: <filename>:<line>: <your_message> */ \
-    std::cout << __FILE__ << ":" << __LINE__ << ": " << (message) << std::endl; \
-} while (0)
-
-#define LOG_3(message) do { \
-    char buffer[128]; /* Buffer to hold the formatted string, adjust size if needed */ \
-    /* Format: L<line> <filename>: <your_message> */ \
-    snprintf(buffer, sizeof(buffer), "L%d %s: %s", __LINE__, __FILE__, (message)); \
-    /* Ensure null termination even if snprintf truncates */ \
-    buffer[sizeof(buffer) - 1] = '\0'; \
-    
-    pros::lcd::set_text((lcd_line), buffer); \
+#define LOG_1(message) do { \
     /* Format: <filename>:<line>: <your_message> */ \
     std::cout << __FILE__ << ":" << __LINE__ << ": " << (message) << std::endl; \
 } while (0)
@@ -213,21 +188,13 @@ void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     pros::lcd::set_text(1, "Hello Team Boom! Boom!");
 
-    std::string version_string_runtime = "v";
-    version_string_runtime += "Version: "
+#if DEBUG_LEVEL == 1
+    std::string version_string_runtime = "Version:";
     version_string_runtime += STRINGIFY(VERSION_MAJOR);
     version_string_runtime += ".";
     version_string_runtime += STRINGIFY(VERSION_MINOR);
-
-#if DEBUG_LEVEL == 1
-    LOG_1(2, version_string_runtime);
-    LOG_1(2, "Enter initialize()");
-#elif DEBUG_LEVEL == 2
-    LOG_2(version_string_runtime);
-    LOG_2("Enter initialize()");
-#elif DEBUG_LEVEL == 3
-    LOG_3(version_string_runtime);
-    LOG_3("Enter initialize()");
+    LOG_1(version_string_runtime);
+    LOG_1("Enter initialize()");
 #endif 
 
     pros::lcd::register_btn1_cb(on_center_button);
@@ -309,20 +276,9 @@ void autonomous() {
 /**
  * Runs in driver control
  **/
-void opcontrol() {
-<<<<<<< HEAD
+void opcontrol() 
+{
     initialize();
-=======
-
-#if DEBUG_LEVEL == 1
-    LOG_1(2, "Enter opcontrol()");
-#elif DEBUG_LEVEL == 2
-    LOG_2("Enter opcontrol()");
-#elif DEBUG_LEVEL == 3
-    LOG_3("Enter opcontrol()");
-#endif 
-
->>>>>>> 2668535a99934ecf0fa6d4b3083092bc66685106
     // controller
     // loop to continuously update motors
     while (true) 
@@ -339,9 +295,15 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
         chassis.tank(leftY, rightY, 0);
-		
+	
+#if DEBUG_LEVEL == 1
+    LOG_1("Enter updateIntake()");
+#endif    
 	updateIntake();
-	updateSlapper();
-        pros::delay(10);
+#if DEBUG_LEVEL == 1
+    LOG_1("Enter updateSlapper()");
+#endif   	
+    updateSlapper();
+    pros::delay(10);
     }
 }
